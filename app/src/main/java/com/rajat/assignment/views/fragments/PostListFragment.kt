@@ -2,6 +2,7 @@ package com.rajat.assignment.views.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajat.assignment.R
 import com.rajat.assignment.databinding.FragmentPostListBinding
 import com.rajat.assignment.utils.DataHandler
+import com.rajat.assignment.utils.Utils
 import com.rajat.assignment.viewmodels.MainViewModel
 import com.rajat.assignment.views.adapter.PostAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,18 +21,21 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
 
     private lateinit var  binding : FragmentPostListBinding
     private lateinit var mainViewModel : MainViewModel
-
     @Inject
     lateinit var postAdapter : PostAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        Utils.setViewModelCallback(mainViewModel);
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentPostListBinding.bind(view)
-        mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
         init()
-
         mainViewModel.posts.observe(viewLifecycleOwner) { dataHandler ->
             when (dataHandler) {
                 is DataHandler.SUCCESS -> {
@@ -48,9 +53,17 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
                 }
             }
         }
-        mainViewModel.getPosts()
+
+        if(Utils.isInternetConnected(requireContext())) {
+            mainViewModel.getPosts()
+        } else {
+            Toast.makeText(context, "Please connect to internet", Toast.LENGTH_SHORT).show()
+            binding.progressBar.visibility = View.GONE
+
+        }
 
     }
+
 
     private fun init() {
 

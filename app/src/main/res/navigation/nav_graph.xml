@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/postListFragement">
+
+    <fragment
+        android:id="@+id/postListFragement"
+        android:name="com.rajat.assignment.views.fragments.PostListFragment"
+        android:label="fragment_online"
+        tools:layout="@layout/fragment_post_list">
+        <action
+            android:id="@+id/action_postListFragement_to_detailPostFragment"
+            app:destination="@id/detailPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailPostFragment"
+        android:name="com.rajat.assignment.views.fragments.DetailPostFragment"
+        android:label="fragment_detail_post"
+        tools:layout="@layout/fragment_detail_post">
+<!--        <argument-->
+<!--            android:name="post_data"-->
+<!--            app:argType="com.rajat.assignment.models.PostsItem"-->
+<!--            app:nullable="true"/>-->
+    </fragment>
+
+</navigation>
